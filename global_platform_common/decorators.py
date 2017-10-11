@@ -4,12 +4,11 @@ from typing import Callable
 import cerberus
 from sanic import response
 
-from app import logger
-
 
 class ValidateRequest:
-    def __init__(self, validator_schema: dict) -> None:
+    def __init__(self, validator_schema: dict, logger) -> None:
         self.validator_schema = validator_schema
+        self.logger = logger
 
     def __call__(self, view_function: Callable) -> None:
 
@@ -20,7 +19,7 @@ class ValidateRequest:
 
             validator = cerberus.Validator(self.validator_schema)
             if not validator.validate(payload):
-                logger.info(
+                self.logger.info(
                     "Received data is not valid!",
                     payload=payload, errors=validator.errors
                 )
@@ -31,7 +30,7 @@ class ValidateRequest:
         return wrapped_view_function
 
 
-def in_state(allowed_states):
+def in_state(allowed_states, logger):
     def wrapper(func):
         @wraps(func)
         def _in_state(*args, **kwargs):

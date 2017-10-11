@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="global-platform-common",
+    name="global_platform_common",
     version="0.1.0",
     description="Helpers for fyndiq services",
-    url="https://github.com/fyndiq/global-platform-common",
+    url="https://github.com/fyndiq/global_platform_common",
     author="Fyndiq AB",
     author_email="support@fyndiq.com",
     license="MIT",
