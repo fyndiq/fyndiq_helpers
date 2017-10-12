@@ -9,28 +9,23 @@ from sanic import response
 logger = structlog.get_logger(__name__)
 
 
-class ValidateRequest:
-    def __init__(self, validator_schema: dict) -> None:
-        self.validator_schema = validator_schema
-
-    def __call__(self, view_function: Callable) -> None:
-
-        @wraps(view_function)
-        def wrapped_view_function(*args, **kwargs):
-            request = args[0]
+def validate_payload(schema):
+    """
+    Validate payload according given schema.
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(request, *args, **kwargs):
             payload = request.json or {}
-
-            validator = cerberus.Validator(self.validator_schema)
+            validator = cerberus.Validator(schema)
             if not validator.validate(payload):
-                logger.info(
-                    "Received data is not valid!",
-                    payload=payload, errors=validator.errors
+                logger.warning(
+                    "Invalid payload", payload=payload, errors=validator.errors
                 )
                 return response.json(validator.errors, 400)
-
-            return view_function(request, **kwargs)
-
-        return wrapped_view_function
+            return f(request, payload, *args, **kwargs)
+        return decorated_function
+    return decorator
 
 
 def in_state(allowed_states):
