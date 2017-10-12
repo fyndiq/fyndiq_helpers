@@ -1,1 +1,2 @@
 cerberus>=1.1
+structlog>=17.2.0

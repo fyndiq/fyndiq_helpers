@@ -1,14 +1,17 @@
 from functools import wraps
 from typing import Callable
 
+import structlog
+
 import cerberus
 from sanic import response
 
+logger = structlog.get_logger(__name__)
+
 
 class ValidateRequest:
-    def __init__(self, validator_schema: dict, logger) -> None:
+    def __init__(self, validator_schema: dict) -> None:
         self.validator_schema = validator_schema
-        self.logger = logger
 
     def __call__(self, view_function: Callable) -> None:
 
@@ -19,7 +22,7 @@ class ValidateRequest:
 
             validator = cerberus.Validator(self.validator_schema)
             if not validator.validate(payload):
-                self.logger.info(
+                logger.info(
                     "Received data is not valid!",
                     payload=payload, errors=validator.errors
                 )
@@ -30,7 +33,7 @@ class ValidateRequest:
         return wrapped_view_function
 
 
-def in_state(allowed_states, logger):
+def in_state(allowed_states):
     def wrapper(func):
         @wraps(func)
         def _in_state(*args, **kwargs):

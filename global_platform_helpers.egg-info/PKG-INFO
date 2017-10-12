@@ -1,8 +1,8 @@
 Metadata-Version: 1.0
-Name: global_platform_common
+Name: global_platform_helpers
 Version: 0.1.0
 Summary: Helpers for fyndiq services
-Home-page: https://github.com/fyndiq/global_platform_common
+Home-page: https://github.com/fyndiq/global_platform_helpers
 Author: Fyndiq AB
 Author-email: support@fyndiq.com
 License: MIT
