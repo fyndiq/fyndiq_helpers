@@ -29,6 +29,10 @@ def validate_payload(schema):
 
 
 def in_state(allowed_states):
+    """
+    Validates that the object of the decorated method has a
+    state variable which is in any of the allowed_states
+    """
     def wrapper(func):
         @wraps(func)
         def _in_state(*args, **kwargs):
