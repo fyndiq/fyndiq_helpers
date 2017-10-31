@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-echo Unimplemented!
+python3 -m unittest discover -s tests/
