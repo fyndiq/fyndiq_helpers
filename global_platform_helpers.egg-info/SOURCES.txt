@@ -1,9 +1,9 @@
 README.md
-global_platform_helpers/__init__.py
-global_platform_helpers/decorators.py
-global_platform_helpers.egg-info/PKG-INFO
-global_platform_helpers.egg-info/SOURCES.txt
-global_platform_helpers.egg-info/dependency_links.txt
-global_platform_helpers.egg-info/not-zip-safe
-global_platform_helpers.egg-info/requires.txt
-global_platform_helpers.egg-info/top_level.txt
+fyndiq_2.0_helpers/__init__.py
+fyndiq_2.0_helpers/decorators.py
+fyndiq_2.0_helpers.egg-info/PKG-INFO
+fyndiq_2.0_helpers.egg-info/SOURCES.txt
+fyndiq_2.0_helpers.egg-info/dependency_links.txt
+fyndiq_2.0_helpers.egg-info/not-zip-safe
+fyndiq_2.0_helpers.egg-info/requires.txt
+fyndiq_2.0_helpers.egg-info/top_level.txt

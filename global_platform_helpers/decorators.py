@@ -72,6 +72,7 @@ class validate_payload:
 class in_state:
     """
     Check if the event aggregate is in allowed state.
+
     TODO: maybe this should raise some InvalidStateException.
     """
 

@@ -1,1 +1,1 @@
-global_platform_helpers
+fyndiq_2.0_helpers
