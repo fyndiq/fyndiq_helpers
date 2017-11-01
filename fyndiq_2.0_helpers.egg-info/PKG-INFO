@@ -1,8 +1,8 @@
 Metadata-Version: 1.0
-Name: global_platform_helpers
+Name: fyndiq_2.0_helpers
 Version: 0.1.0
 Summary: Helpers for fyndiq services
-Home-page: https://github.com/fyndiq/global_platform_helpers
+Home-page: https://github.com/fyndiq/fyndiq_2.0_helpers
 Author: Fyndiq AB
 Author-email: support@fyndiq.com
 License: MIT
