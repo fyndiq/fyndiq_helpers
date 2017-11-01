@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="fyndiq_2.0_helpers",
+    name="fyndiq_helpers",
     version="0.1.0",
     description="Helpers for fyndiq services",
-    url="https://github.com/fyndiq/fyndiq_2.0_helpers",
+    url="https://github.com/fyndiq/fyndiq_helpers",
     author="Fyndiq AB",
     author_email="support@fyndiq.com",
     license="MIT",

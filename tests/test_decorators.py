@@ -3,7 +3,7 @@ from unittest import mock, TestCase
 
 from sanic import response
 
-from fyndiq_2.0_helpers.decorators import validate_payload, check_required_params
+from fyndiq_helpers.decorators import validate_payload, check_required_params
 
 
 class ViewDecoratorsTest(TestCase):
