@@ -9,7 +9,6 @@ from sanic import response
 logger = structlog.get_logger(__name__)
 
 
-
 class check_required_params:
     """
     This will return 400 from a view if a required param/params are missing.
@@ -20,13 +19,15 @@ class check_required_params:
         self.required_params = required_params
 
     def __call__(self, function: Callable) -> Callable:
-
         @wraps(function)
         def wrapped_view_function(*args, **kwargs) -> Any:
             request = args[0]
             request_args = request.args
 
-            missing_params = [param for param in self.required_params if not request_args.get(param)]
+            missing_params = [
+                param for param in self.required_params
+                if not request_args.get(param)
+            ]
 
             if missing_params:
                 return response.json({
@@ -42,29 +43,31 @@ class validate_payload:
     """
     Class based decorator for validating data in views.
 
-    The validation is done by cerberus lib against view-specific schemas.
+    The validation is done by Cerberus lib against view-specific schemas.
     """
 
-    def __init__(self, validator_schema: dict) -> None:
-        assert validator_schema
-        self.validator_schema = validator_schema
+    def __init__(self, schema: dict) -> None:
+        self.schema = schema
 
-    def __call__(self, function: Callable) -> Callable:
-
-        @wraps(function)
-        def wrapped_function(*args, **kwargs) -> Any:
-            # First argument of the view function is expected to be a request object.
-            request = args[0]
+    def __call__(self, view: Callable) -> Callable:
+        @wraps(view)
+        def wrapped_function(request, *args, **kwargs) -> Any:
             payload = request.json or {}
-
-            validator = cerberus.Validator(self.validator_schema)
+            validator = cerberus.Validator(self.schema)
             if not validator.validate(payload):
-                logger.warning(
-                    "Invalid payload", payload=payload, errors=validator.errors
-                )
-                return response.json(validator.errors, status=400)
+                errors = validator.errors
+                description = "Invalid payload"
+                logger.warning(description, payload=payload, errors=errors)
+                desc = {
+                    'description': description,
+                    'content': {
+                        'code': 400,
+                        'message': errors
+                    }
+                }
+                return response.json(desc, 400)
 
-            return function(request, **kwargs)
+            return view(request, payload, *args, **kwargs)
 
         return wrapped_function
 
@@ -80,7 +83,6 @@ class in_state:
         self.allowed_states = allowed_states
 
     def __call__(self, function: Callable) -> Callable:
-
         @wraps(function)
         def wrapped_function(*args, **kwargs) -> Any:
             instance, _ = args
