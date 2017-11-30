@@ -1,5 +1,5 @@
 
-from typing import NamedTumple
+from typing import NamedTuple
 
 
 class MoneyField(NamedTuple):
