@@ -6,7 +6,8 @@ ROUNDING_PRECISION = Decimal('1.00')
 
 class UnitConverter:
     """
-    Provides functionality to convert decimal values to minor units and vice versa.
+    Provides functionality to convert decimal values to minor units
+    and vice versa.
 
     Example:
         >>> assert UnitConverter.to_minor_units(Decimal('1.0') == 100
