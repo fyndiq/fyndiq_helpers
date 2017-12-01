@@ -10,17 +10,17 @@ class TestConverter:
     # To minor units
 
     def test_to_minor_units(self):
-        result = UnitConverter.to_minor_units("12.10")
+        result = UnitConverter.to_minor_units(Decimal("12.10"))
         expected = 1210
         assert result == expected
 
     def test_to_minor_units_round_up(self):
-        result = UnitConverter.to_minor_units("0.09999999999")
+        result = UnitConverter.to_minor_units(Decimal("0.09999999999"))
         expected = 10
         assert result == expected
 
     def test_to_minor_units_round_down(self):
-        result = UnitConverter.to_minor_units("0.011")
+        result = UnitConverter.to_minor_units(Decimal("0.011"))
         expected = 1
         assert result == expected
 
