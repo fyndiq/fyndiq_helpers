@@ -7,5 +7,5 @@ lint:
 setup:
 	scripts/setup.sh
 
-test:
+test: check lint
 	scripts/test.sh
