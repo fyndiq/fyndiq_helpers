@@ -42,7 +42,7 @@ class TestViewDecorators:
 
         assert request_response.status == 400
         expected_error = b'{"description":"Invalid payload","content"' \
-                         b':{"code":400,"message":{"field":["must be of string type"]}}}'
+                         b':{"code":400,"message":{"field":["must be of string type"]}}}'  # noqa
         assert request_response.body == expected_error
 
     def test_check_required_params_success(self):
@@ -73,7 +73,7 @@ class TestViewDecorators:
 
         assert request_response.status == 400
         expected_error = b'{"status":"ERROR",'\
-                         b'"description":"Following request params are required: [\'required_param\']."}'
+                         b'"description":"Following request params are required: [\'required_param\']."}'   # noqa
         assert request_response.body == expected_error
 
     def test_check_required_params_missing_multiple_params(self):
@@ -87,6 +87,7 @@ class TestViewDecorators:
 
         assert request_response.status == 400
         expected_error = b'{"status":"ERROR",'\
-                         b'"description":"Following request params are required: '\
+                         b'"description":' \
+                         b'"Following request params are required: '\
                          b'[\'required_param\', \'another_required_param\']."}'
         assert request_response.body == expected_error

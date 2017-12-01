@@ -32,7 +32,7 @@ class check_required_params:
             if missing_params:
                 return response.json({
                     'status': 'ERROR',
-                    'description': f'Following request params are required: {missing_params}.'
+                    'description': f'Following request params are required: {missing_params}.'  # noqa
                 }, status=400)
             return function(request, **kwargs)
 
