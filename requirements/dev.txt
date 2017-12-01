@@ -1,5 +1,7 @@
 -r common.txt
 
+mypy
+flake8
 pytest
 pytest-coverage
 ipdb

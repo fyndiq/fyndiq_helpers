@@ -1,5 +1,9 @@
+.coverage
 *.pyc
-__pycache__
+__pycache__/
 .venv/
 *.log
 requirements/local.txt
+.cache
+.mypy_cache
+coverage.xml
