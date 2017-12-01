@@ -1,5 +1,7 @@
-
+from decimal import Decimal
 from typing import NamedTuple
+
+MINOR_UNIT_CONVERSION_FACTOR = 100
 
 
 class MoneyField(NamedTuple):
@@ -20,3 +22,12 @@ class MoneyField(NamedTuple):
     """
     amount: int
     currency: str
+
+    def to_decimals(self):
+        return Decimal(amount / MINOR_UNIT_CONVERSION_FACTOR)
+
+    def get_amount_from_decimal(self, decimal_amount: Decimal) -> int:
+        return int(decimal_amount * Decimal(MINOR_UNIT_CONVERSION_FACTOR))
+
+    def set_amount_from_decimal(self, decimal_amount: Decimal) -> None:
+        self.amount = self.get_amount_from_decimal(decimal_amount: Decimal)
