@@ -1,4 +1,6 @@
 -r common.txt
 
+pytest
+pytest-coverage
 ipdb
 

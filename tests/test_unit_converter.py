@@ -1,5 +1,6 @@
 
 import pytest
+from decimal import Decimal
 
 from fyndiq_helpers.unit_converter import UnitConverter
 
@@ -7,9 +8,6 @@ from fyndiq_helpers.unit_converter import UnitConverter
 class TestConverter:
 
     # To minor units
-
-    def test_test():
-        assert 1 == 2    
 
     def test_to_minor_units(self):
         result = UnitConverter.to_minor_units("12.10")
@@ -34,12 +32,12 @@ class TestConverter:
 
     def test_to_decimals_success(self):
         result = UnitConverter.to_decimals(1210)
-        expected = "12.10"
+        expected = Decimal("12.10")
         assert result == expected
 
     def test_to_decimals_fraction(self):
         result = UnitConverter.to_decimals(9)
-        expected = "0.09"
+        expected = Decimal("0.09")
         assert result == expected
 
     def test_to_decimals_from_float_assertion_error(self):
@@ -48,6 +46,5 @@ class TestConverter:
 
     def test_to_decimals_zero(self):
         result = UnitConverter.to_decimals(0)
-        expected = "0"
+        expected = Decimal("0.00")
         assert result == expected
-
