@@ -6,12 +6,12 @@ ROUNDING_PRECISION = Decimal('1.00')
 
 class UnitConverter:
     """
-    Since Klarna uses minor units for payment amounts, we convert decimals to
-    this format.
-    1.0 -> 100
+    Provides functionality to convert decimal values to minor units and vice versa.
 
-    When we send data back, we convert back to decimals.
-    100 -> 1.0
+    Example:
+        >>> assert UnitConverter.to_minor_units(Decimal('1.0') == 100
+
+        >>> assert UnitConverter.to_decimals(100) == Decimal('1.0')
 
     # TODO: make this class support all currencies.
     """
