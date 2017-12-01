@@ -23,7 +23,8 @@ class MoneyField:
     def to_decimals(self) -> Decimal:
         return UnitConverter.to_decimals(self.amount)
 
-    def get_amount_from_decimal(self, decimal_amount: Decimal) -> int:
+    @staticmethod
+    def get_amount_from_decimal(decimal_amount: Decimal) -> int:
         return UnitConverter.to_minor_units(decimal_amount)
 
     def set_amount_from_decimal(self, decimal_amount: Decimal) -> None:
