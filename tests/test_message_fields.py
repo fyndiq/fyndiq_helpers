@@ -42,3 +42,12 @@ class TestMoneyField():
         mf.set_amount_from_decimal(new_amount_decimal)
 
         assert mf.amount == expected_amount
+
+    def test_to_dict_method(self):
+        amount = 1
+        currency = 'SEK'
+        mf = MoneyField(amount=amount, currency=currency)
+        expected_response = {'amount': amount, 'currency': currency}
+
+        response = mf.to_dict()
+        assert response == expected_response
