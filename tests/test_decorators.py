@@ -1,14 +1,15 @@
 
-from unittest import mock, TestCase
+import pytest
+from unittest import mock
 
 from sanic import response
 
 from fyndiq_helpers.decorators import validate_payload, check_required_params
 
 
-class ViewDecoratorsTest(TestCase):
+class TestViewDecorators:
 
-    def setUp(self):
+    def setup_method(self):
         self.mocked_request = mock.MagicMock()
 
     def test_validate_payload_success(self):
@@ -19,18 +20,12 @@ class ViewDecoratorsTest(TestCase):
         }
 
         @validate_payload(schema)
-        def view(request):
+        def view(request, payload):
             return response.json({}, status=200)
 
         request_response = view(self.mocked_request)
 
-        self.assertEqual(200, request_response.status)
-
-    def test_validate_payload_missing_schema_decorator_argument(self):
-        with self.assertRaises(AssertionError):
-            @validate_payload([])
-            def view(request):
-                return response.json({}, status=200)
+        assert request_response.status == 200
 
     def test_validate_payload_incorrect_type(self):
         self.mocked_request.json = {"field": 12345}
@@ -40,14 +35,15 @@ class ViewDecoratorsTest(TestCase):
         }
 
         @validate_payload(schema)
-        def view(request):
+        def view(request, payload):
             return response.json({}, status=200)
 
         request_response = view(self.mocked_request)
 
-        self.assertEqual(400, request_response.status)
-        expected_error = b'{"field":["must be of string type"]}'
-        self.assertEqual(expected_error, request_response.body)
+        assert request_response.status == 400
+        expected_error = b'{"description":"Invalid payload","content"' \
+                         b':{"code":400,"message":{"field":["must be of string type"]}}}'  # noqa
+        assert request_response.body == expected_error
 
     def test_check_required_params_success(self):
         self.mocked_request.args = {"required_param": "value"}
@@ -58,12 +54,12 @@ class ViewDecoratorsTest(TestCase):
 
         request_response = view(self.mocked_request)
 
-        self.assertEqual(200, request_response.status)
+        assert request_response.status == 200
 
     def test_check_required_params_missing_decorator_argument(self):
-        with self.assertRaises(AssertionError):
+        with pytest.raises(AssertionError):
             @check_required_params([])
-            def view(request):
+            def view(request, payload):
                 return response.json({}, status=200)
 
     def test_check_required_params_missing_param(self):
@@ -75,10 +71,10 @@ class ViewDecoratorsTest(TestCase):
 
         request_response = view(self.mocked_request)
 
-        self.assertEqual(400, request_response.status)
+        assert request_response.status == 400
         expected_error = b'{"status":"ERROR",'\
-                         b'"description":"Following request params are required: [\'required_param\']."}'
-        self.assertEqual(expected_error, request_response.body)
+                         b'"description":"Following request params are required: [\'required_param\']."}'   # noqa
+        assert request_response.body == expected_error
 
     def test_check_required_params_missing_multiple_params(self):
         self.mocked_request.args = {}
@@ -89,8 +85,9 @@ class ViewDecoratorsTest(TestCase):
 
         request_response = view(self.mocked_request)
 
-        self.assertEqual(400, request_response.status)
+        assert request_response.status == 400
         expected_error = b'{"status":"ERROR",'\
-                         b'"description":"Following request params are required: '\
+                         b'"description":' \
+                         b'"Following request params are required: '\
                          b'[\'required_param\', \'another_required_param\']."}'
-        self.assertEqual(expected_error, request_response.body)
+        assert request_response.body == expected_error

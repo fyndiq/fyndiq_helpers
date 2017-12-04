@@ -1,5 +1,11 @@
+check:
+	@scripts/check.sh
+
+lint:
+	@scripts/lint.sh
+
 setup:
 	scripts/setup.sh
 
-test:
+test: check lint
 	scripts/test.sh

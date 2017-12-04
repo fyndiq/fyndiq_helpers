@@ -1,8 +1,9 @@
+from decimal import Decimal
 
-from typing import NamedTuple
+from fyndiq_helpers.unit_converter import UnitConverter
 
 
-class MoneyField(NamedTuple):
+class MoneyField:
     """
     Represents the composite amount field for money values.
     Used by both events and commands.
@@ -18,5 +19,20 @@ class MoneyField(NamedTuple):
         >>>     total_amount = Dict[str, MoneyField]
 
     """
-    amount: int
-    currency: str
+
+    @staticmethod
+    def get_amount_from_decimal(decimal_amount: Decimal) -> int:
+        return UnitConverter.to_minor_units(decimal_amount)
+
+    def to_decimals(self) -> Decimal:
+        return UnitConverter.to_decimals(self.amount)
+
+    def set_amount_from_decimal(self, decimal_amount: Decimal) -> None:
+        self.amount = self.get_amount_from_decimal(decimal_amount)
+
+    def __init__(self, amount: int, currency: str) -> None:
+        self.amount = amount
+        self.currency = currency
+
+    def to_dict(self):
+        return {'amount': self.amount, 'currency': self.currency}

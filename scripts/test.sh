@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-python3 -m unittest discover -s tests/
+CONFIG=test py.test  -x . --cov fyndiq_helpers/ --no-cov-on-fail
