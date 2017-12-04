@@ -20,12 +20,12 @@ class MoneyField:
 
     """
 
-    def to_decimals(self) -> Decimal:
-        return UnitConverter.to_decimals(self.amount)
-
     @staticmethod
     def get_amount_from_decimal(decimal_amount: Decimal) -> int:
         return UnitConverter.to_minor_units(decimal_amount)
+
+    def to_decimals(self) -> Decimal:
+        return UnitConverter.to_decimals(self.amount)
 
     def set_amount_from_decimal(self, decimal_amount: Decimal) -> None:
         self.amount = self.get_amount_from_decimal(decimal_amount)
@@ -33,3 +33,6 @@ class MoneyField:
     def __init__(self, amount: int, currency: str) -> None:
         self.amount = amount
         self.currency = currency
+
+    def to_dict(self):
+        return {'amount': self.amount, 'currency': self.currency}
