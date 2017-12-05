@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from fyndiq_helpers.message_fields import MoneyField
+from fyndiq_helpers.message_fields import MoneyField, DecimalMoneyField
 
 
 class TestMoneyField():
@@ -51,3 +51,15 @@ class TestMoneyField():
 
         response = mf.to_dict()
         assert response == expected_response
+
+
+class TestDecimalMoneyField():
+    def test_init(self):
+        amount = Decimal("10.0")
+        currency = 'SEK'
+        expected_amount = 1000
+
+        mf = DecimalMoneyField(decimal_amount=amount, currency=currency)
+
+        assert mf.amount == expected_amount
+        assert mf.currency == currency
