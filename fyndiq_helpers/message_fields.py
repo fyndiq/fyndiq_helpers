@@ -36,3 +36,9 @@ class MoneyField:
 
     def to_dict(self):
         return {'amount': self.amount, 'currency': self.currency}
+
+
+class DecimalMoneyField(MoneyField):
+    def __init__(self, decimal_amount: Decimal, currency: str) -> None:
+        self.amount = DecimalMoneyField.get_amount_from_decimal(decimal_amount)
+        self.currency = currency
