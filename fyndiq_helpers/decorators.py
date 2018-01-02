@@ -47,7 +47,7 @@ class validate_payload:
     """
 
     def __init__(self, schema: dict,
-                 allow_unknown_fields: bool = True) -> None:
+                 allow_unknown_fields: bool = False) -> None:
         self.schema = schema
         self.allow_unknown_fields = allow_unknown_fields
 

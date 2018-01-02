@@ -45,11 +45,10 @@ class TestViewDecorators:
                          b':{"code":400,"message":{"field":["must be of string type"]}}}'  # noqa
         assert request_response.body == expected_error
 
-    def test_validate_payload_ignore_extra_fields(self):
+    def test_validate_payload_should_ignore_extra_fields(self):
         self.mocked_request.json = {
             'field': 'aaaaa',
             'extra_field': 33333,
-            'another_extra': 66666,
         }
 
         schema = {
@@ -63,6 +62,28 @@ class TestViewDecorators:
         request_response = view(self.mocked_request)
 
         assert request_response.status == 200
+
+    def test_validate_payload_ignore_should_complain_about_fields(self):
+        self.mocked_request.json = {
+            'field': 'aaaaa',
+            'extra_field': 33333,
+        }
+
+        schema = {
+            'field': {'type': 'string'}
+        }
+
+        @validate_payload(schema)
+        def view(request, payload):
+            return response.json({}, status=200)
+
+        request_response = view(self.mocked_request)
+
+        assert request_response.status == 400
+        expected_error = b'{"description":"Invalid payload","content"' \
+                         b':{"code":400,"message":{"extra_field":["unknown field"]}}}'  # noqa
+        print(request_response.body)
+        assert request_response.body == expected_error
 
     def test_check_required_params_success(self):
         self.mocked_request.args = {"required_param": "value"}
