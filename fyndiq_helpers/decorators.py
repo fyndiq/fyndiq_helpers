@@ -46,14 +46,19 @@ class validate_payload:
     The validation is done by Cerberus lib against view-specific schemas.
     """
 
-    def __init__(self, schema: dict) -> None:
+    def __init__(self, schema: dict,
+                 allow_unknown_fields: bool = False) -> None:
         self.schema = schema
+        self.allow_unknown_fields = allow_unknown_fields
 
     def __call__(self, view: Callable) -> Callable:
         @wraps(view)
         def wrapped_function(request, *args, **kwargs) -> Any:
             payload = request.json or {}
-            validator = cerberus.Validator(self.schema)
+            validator = cerberus.Validator(
+                self.schema,
+                allow_unknown=self.allow_unknown_fields
+            )
             if not validator.validate(payload):
                 errors = validator.errors
                 description = "Invalid payload"
