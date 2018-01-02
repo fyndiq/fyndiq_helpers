@@ -45,6 +45,25 @@ class TestViewDecorators:
                          b':{"code":400,"message":{"field":["must be of string type"]}}}'  # noqa
         assert request_response.body == expected_error
 
+    def test_validate_payload_ignore_extra_fields(self):
+        self.mocked_request.json = {
+            'field': 'aaaaa',
+            'extra_field': 33333,
+            'another_extra': 66666,
+        }
+
+        schema = {
+            'field': {'type': 'string'}
+        }
+
+        @validate_payload(schema, allow_unknown_fields=True)
+        def view(request, payload):
+            return response.json({}, status=200)
+
+        request_response = view(self.mocked_request)
+
+        assert request_response.status == 200
+
     def test_check_required_params_success(self):
         self.mocked_request.args = {"required_param": "value"}
 
