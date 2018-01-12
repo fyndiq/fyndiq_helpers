@@ -54,6 +54,19 @@ class validate_payload:
     def __call__(self, view: Callable) -> Callable:
         @wraps(view)
         def wrapped_function(request, *args, **kwargs) -> Any:
+
+            if request.content_type != 'application/json':
+                return response.json(
+                    {
+                        'description': 'Unsupported Media Type',
+                        'content': {
+                            'code': 415,
+                            'message': 'Expected application/json'
+                        }
+                    },
+                    415
+                )
+
             payload = request.json or {}
             validator = cerberus.Validator(
                 self.schema,
@@ -61,7 +74,7 @@ class validate_payload:
             )
             if not validator.validate(payload):
                 errors = validator.errors
-                description = "Invalid payload"
+                description = 'Invalid payload'
                 logger.warning(description, payload=payload, errors=errors)
                 desc = {
                     'description': description,
@@ -95,7 +108,7 @@ class in_state:
             if instance.state in self.allowed_states:
                 return function(*args, **kwargs)
             logger.warning(
-                "Invalid aggregate state", method=function.__name__,
+                'Invalid aggregate state', method=function.__name__,
                 current_state=instance.state,
                 allowed_states=[state for state in self.allowed_states]
             )

@@ -13,6 +13,7 @@ class TestViewDecorators:
         self.mocked_request = mock.MagicMock()
 
     def test_validate_payload_success(self):
+        self.mocked_request.content_type = 'application/json'
         self.mocked_request.json = {"field": "value"}
 
         schema = {
@@ -27,7 +28,28 @@ class TestViewDecorators:
 
         assert request_response.status == 200
 
+    def test_validate_payload_incorrect_content_type(self):
+        self.mocked_request.content_type = 'application/octet-stream'
+        self.mocked_request.json = {"field": 12345}
+
+        schema = {
+            'field': {'type': 'string'}
+        }
+
+        @validate_payload(schema)
+        def view(request, payload):
+            return response.json({}, status=200)
+
+        request_response = view(self.mocked_request)
+
+        assert request_response.status == 415
+        assert request_response.body == b'{"description":' \
+                                        b'"Unsupported Media Type",' \
+                                        b'"content":{"code":415,"message":' \
+                                        b'"Expected application\\/json"}}'
+
     def test_validate_payload_incorrect_type(self):
+        self.mocked_request.content_type = 'application/json'
         self.mocked_request.json = {"field": 12345}
 
         schema = {
@@ -46,6 +68,7 @@ class TestViewDecorators:
         assert request_response.body == expected_error
 
     def test_validate_payload_should_ignore_extra_fields(self):
+        self.mocked_request.content_type = 'application/json'
         self.mocked_request.json = {
             'field': 'aaaaa',
             'extra_field': 33333,
@@ -64,6 +87,7 @@ class TestViewDecorators:
         assert request_response.status == 200
 
     def test_validate_payload_ignore_should_complain_about_fields(self):
+        self.mocked_request.content_type = 'application/json'
         self.mocked_request.json = {
             'field': 'aaaaa',
             'extra_field': 33333,
