@@ -4,7 +4,7 @@ import logging.config
 import structlog
 
 
-def setup(config):
+def setup(use_colors, use_logstash):
     timestamper = structlog.processors.TimeStamper(
         fmt="ISO", utc=True
     )
@@ -23,7 +23,7 @@ def setup(config):
             'dev': {
                 '()': structlog.stdlib.ProcessorFormatter,
                 'processor': structlog.dev.ConsoleRenderer(
-                    colors=True if config.DEBUG else False
+                    colors=True if use_colors else False
                 ),
                 'foreign_pre_chain': pre_chain,
             }
@@ -32,7 +32,7 @@ def setup(config):
             'console': {
                 'level': 'INFO',
                 'class': 'logging.StreamHandler',
-                'formatter': 'dev' if config.DEBUG else 'logstash'
+                'formatter': 'logstash' if use_logstash else 'dev'
             }
         },
         'loggers': {
