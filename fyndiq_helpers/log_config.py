@@ -4,13 +4,28 @@ import logging.config
 import structlog
 
 
-def setup(use_colors, use_logstash):
+class HealthFilter(logging.Filter):
+    def filter(self, record):
+        request = getattr(record, 'request', None)
+        return not request.endswith('/health') if request else True
+
+
+def add_sanic_request(logger, level, event_dict):
+    record = event_dict.get('_record')
+    request = getattr(record, 'request', None)
+    if request:
+        event_dict['event'] = request
+    return event_dict
+
+
+def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
     timestamper = structlog.processors.TimeStamper(
         fmt="ISO", utc=True
     )
     pre_chain = [
         structlog.stdlib.add_log_level,
         timestamper,
+        add_sanic_request
     ]
 
     logging.config.dictConfig({
@@ -28,11 +43,17 @@ def setup(use_colors, use_logstash):
                 'foreign_pre_chain': pre_chain,
             }
         },
+        'filters': {
+            'health_filter': {
+                '()': 'app.log_config.HealthFilter'
+            }
+        },
         'handlers': {
             'console': {
                 'level': 'INFO',
                 'class': 'logging.StreamHandler',
-                'formatter': 'logstash' if use_logstash else 'dev'
+                'formatter': 'logstash' if use_logstash else 'dev',
+                'filters': [] if use_filters else ['health_filter']
             }
         },
         'loggers': {
@@ -40,6 +61,11 @@ def setup(use_colors, use_logstash):
                 'handlers': ['console'],
                 'level': 'DEBUG',
                 'propagate': False,
+            },
+            'sanic': {
+                'handlers': ['console'],
+                'level': 'INFO',
+                'propagate': False
             },
             'datadog': {
                 'handlers': ['console'],
