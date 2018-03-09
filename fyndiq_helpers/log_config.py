@@ -75,6 +75,11 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
                 'handlers': ['console'],
                 'level': 'INFO',
                 'propagate': False
+            },
+            'datadog': {
+                'handlers': ['console'],
+                'level': 'ERROR',
+                'propagate': False,
             }
         }
     })
