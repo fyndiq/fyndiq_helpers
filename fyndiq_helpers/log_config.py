@@ -54,7 +54,7 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
         },
         'filters': {
             'health_filter': {
-                '()': 'app.log_config.HealthFilter'
+                '()': 'fyndiq_helpers.log_config.HealthFilter'
             }
         },
         'handlers': {
