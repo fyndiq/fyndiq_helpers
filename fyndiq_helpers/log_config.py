@@ -7,7 +7,7 @@ import structlog
 class HealthFilter(logging.Filter):
     def filter(self, record):
         request = getattr(record, 'request', None)
-        return not request.endswith('/health') if request else True
+        return '/health' not in request if request else True
 
 
 def add_sanic_request(logger, level, event_dict):
