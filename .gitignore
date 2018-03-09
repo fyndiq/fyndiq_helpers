@@ -7,3 +7,4 @@ requirements/local.txt
 .cache
 .mypy_cache
 coverage.xml
+.pytest_cache/
