@@ -19,6 +19,15 @@ def add_sanic_request(logger, level, event_dict):
 
 
 def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
+    """ Sets up the log configuration.
+
+    Args:
+        use_colors: ([bool]): [Set this to true if using colorama to color logs]  # noqa
+        use_logstash: ([bool]): [Set true to use logstash logging format]
+        use_filters: ([bool]): [Set to true to remove health endpoint logs (
+            useful for suppressing k8s liveness check) ]
+    """
+
     timestamper = structlog.processors.TimeStamper(
         fmt="ISO", utc=True
     )
@@ -66,11 +75,6 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
                 'handlers': ['console'],
                 'level': 'INFO',
                 'propagate': False
-            },
-            'datadog': {
-                'handlers': ['console'],
-                'level': 'ERROR',
-                'propagate': False,
             }
         }
     })
