@@ -18,7 +18,8 @@ def add_sanic_request(logger, level, event_dict):
     return event_dict
 
 
-def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
+def setup(use_colors: bool, use_logstash: bool, use_filters: bool, 
+          kafka_log_level: str):
     """ Sets up the log configuration.
 
     Args:
@@ -26,6 +27,9 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
         use_logstash: ([bool]): [Set true to use logstash logging format]
         use_filters: ([bool]): [Set to true to remove health endpoint logs (
             useful for suppressing k8s liveness check) ]
+        supress_kafka_logs: ([str]): [Set to the level of logging the underlying 
+            kafka helper libs use to suppress or increase logging 
+            (e.g. "INFO", "DEBUG")]
     """
 
     timestamper = structlog.processors.TimeStamper(
@@ -79,6 +83,16 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
             'datadog': {
                 'handlers': ['console'],
                 'level': 'ERROR',
+                'propagate': False,
+            },
+            'eventsourcing_helpers': {
+                'handlers': ['console'],
+                'level': kafka_log_level,
+                'propagate': False,
+            },
+            'confluent_kafka_helpers': {
+                'handlers': ['console'],
+                'level': kafka_log_level,
                 'propagate': False,
             }
         }
