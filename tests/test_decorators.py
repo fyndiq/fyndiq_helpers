@@ -28,6 +28,22 @@ class TestViewDecorators:
 
         assert request_response.status == 200
 
+    def test_validate_content_type_with_parameters(self):
+        self.mocked_request.content_type = 'application/json; charset=UTF8'
+        self.mocked_request.json = {"field": "value"}
+
+        schema = {
+            'field': {'type': 'string'}
+        }
+
+        @validate_payload(schema)
+        def view(request, payload):
+            return response.json({}, status=200)
+
+        request_response = view(self.mocked_request)
+
+        assert request_response.status == 200
+
     def test_validate_payload_incorrect_content_type(self):
         self.mocked_request.content_type = 'application/octet-stream'
         self.mocked_request.json = {"field": 12345}

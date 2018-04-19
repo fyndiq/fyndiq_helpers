@@ -55,7 +55,7 @@ class validate_payload:
         @wraps(view)
         def wrapped_function(request, *args, **kwargs) -> Any:
 
-            if request.content_type != 'application/json':
+            if 'application/json' not in request.content_type:
                 return response.json(
                     {
                         'description': 'Unsupported Media Type',
