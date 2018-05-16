@@ -80,6 +80,21 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool):
                 'handlers': ['console'],
                 'level': 'ERROR',
                 'propagate': False,
+            },
+            'raven': {
+                'handlers': ['console'],
+                'level': 'WARNING',
+                'propagate': False
+            },
+            'confluent_kafka_helpers': {
+                'handlers': ['console'],
+                'level': 'WARNING',
+                'propagate': False
+            },
+            'eventsourcing_helpers': {
+                'handlers': ['console'],
+                'level': 'WARNING',
+                'propagate': False
             }
         }
     })
