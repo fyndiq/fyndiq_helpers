@@ -22,10 +22,10 @@ def setup(use_debug_settings: bool, use_logstash: bool, use_filters: bool):  # n
     """ Sets up the log configuration.
 
     Args:
-        use_debug_settings: [Set this to true to get all logs and colors]
-        use_logstash: [Set true to use logstash logging format]
-        use_filters: [Set to true to remove health endpoint logs (
-            useful for suppressing k8s liveness check) ]
+        use_debug_settings: Set this to true to get all library logs and colors
+        use_logstash: Set true to use logstash logging format
+        use_filters: Set to true to remove health endpoint logs (
+            useful for suppressing k8s liveness check)
     """
 
     timestamper = structlog.processors.TimeStamper(
