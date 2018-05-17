@@ -18,14 +18,17 @@ def add_sanic_request(logger, level, event_dict):
     return event_dict
 
 
-def setup(use_debug_settings: bool, use_logstash: bool, use_filters: bool):  # noqa
+def setup(use_colors: bool, use_logstash: bool, use_filters: bool,
+        use_quiet_libraries: bool = True):  # noqa
     """ Sets up the log configuration.
 
     Args:
-        use_debug_settings: Set this to true to get all library logs and colors
+        use_colors: Set this to true to get colorama logs with colors
         use_logstash: Set true to use logstash logging format
         use_filters: Set to true to remove health endpoint logs (
             useful for suppressing k8s liveness check)
+        use_quiet_libraries: Set to false to show DEBUG logs from helper
+            libraries
     """
 
     timestamper = structlog.processors.TimeStamper(
@@ -47,7 +50,7 @@ def setup(use_debug_settings: bool, use_logstash: bool, use_filters: bool):  # n
             'dev': {
                 '()': structlog.stdlib.ProcessorFormatter,
                 'processor': structlog.dev.ConsoleRenderer(
-                    colors=True if use_debug_settings else False
+                    colors=True if use_colors else False
                 ),
                 'foreign_pre_chain': pre_chain,
             }
@@ -88,12 +91,12 @@ def setup(use_debug_settings: bool, use_logstash: bool, use_filters: bool):  # n
             },
             'confluent_kafka_helpers': {
                 'handlers': ['console'],
-                'level': 'DEBUG' if use_debug_settings else 'WARNING',
+                'level': 'WARNING' if use_quiet_libraries else 'DEBUG',
                 'propagate': False
             },
             'eventsourcing_helpers': {
                 'handlers': ['console'],
-                'level': 'DEBUG' if use_debug_settings else 'WARNING',
+                'level': 'WARNING' if use_quiet_libraries else 'DEBUG',
                 'propagate': False
             }
         }
