@@ -14,5 +14,6 @@ fyndiq_helpers.egg-info/requires.txt
 fyndiq_helpers.egg-info/top_level.txt
 tests/__init__.py
 tests/test_decorators.py
+tests/test_log_config.py
 tests/test_message_fields.py
 tests/test_unit_converter.py
