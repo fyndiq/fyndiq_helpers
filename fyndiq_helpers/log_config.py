@@ -19,7 +19,7 @@ def add_sanic_request(logger, level, event_dict):
 
 
 def setup(use_colors: bool, use_logstash: bool, use_filters: bool,
-        use_quiet_libraries: bool = True):  # noqa
+        use_quiet_libraries: bool = True, loglevel: str = 'INFO'):
     """ Sets up the log configuration.
 
     Args:
@@ -29,6 +29,9 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool,
             useful for suppressing k8s liveness check)
         use_quiet_libraries: Set to false to show DEBUG logs from helper
             libraries
+        loglevel: The "Master" loglevel setting. No messages with less
+            importance than this level will be shown. Set to 'DEBUG' to get all
+            messages.
     """
 
     timestamper = structlog.processors.TimeStamper(
@@ -62,7 +65,7 @@ def setup(use_colors: bool, use_logstash: bool, use_filters: bool,
         },
         'handlers': {
             'console': {
-                'level': 'INFO',
+                'level': loglevel,
                 'class': 'logging.StreamHandler',
                 'formatter': 'logstash' if use_logstash else 'dev',
                 'filters': [] if use_filters else ['health_filter']
