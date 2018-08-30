@@ -92,7 +92,7 @@ class TestDecimalMoneyField():
     def test_init(self):
         amount = Decimal("10.0")
         currency = 'SEK'
-        vat_amount = 25
+        vat_amount = 250
         vat_rate = 0.25
         expected_amount = 1000
 
