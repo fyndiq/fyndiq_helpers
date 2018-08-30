@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="fyndiq_helpers",
-    version="0.1.8",
+    version="0.2.0",
     description="Helpers for fyndiq services",
     url="https://github.com/fyndiq/fyndiq_helpers",
     author="Fyndiq AB",
