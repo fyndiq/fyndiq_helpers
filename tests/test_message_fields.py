@@ -24,7 +24,7 @@ class TestMoneyField():
     def test_to_decimals_should_return_decimal(self):
         amount = 1000
         currency = 'SEK'
-        vat_amount = 25
+        vat_amount = 250
         vat_rate = 0.25
 
         mf = MoneyField(
@@ -47,7 +47,7 @@ class TestMoneyField():
     def test_set_amount_from_decimal_should_update_amount(self):
         amount = 1000
         currency = 'SEK'
-        vat_amount = 25
+        vat_amount = 250
         vat_rate = 0.25
 
         mf = MoneyField(
@@ -67,7 +67,7 @@ class TestMoneyField():
     def test_to_dict_method(self):
         amount = 1000
         currency = 'SEK'
-        vat_amount = 25
+        vat_amount = 250
         vat_rate = 0.25
 
         mf = MoneyField(
