@@ -19,7 +19,7 @@ def add_sanic_request(logger, level, event_dict):
 
 
 def setup(use_colors: bool, use_logstash: bool, use_filters: bool,
-        use_quiet_libraries: bool = True, loglevel: str = 'INFO'):
+          use_quiet_libraries: bool = True, loglevel: str = 'INFO'):
     """ Sets up the log configuration.
 
     Args:

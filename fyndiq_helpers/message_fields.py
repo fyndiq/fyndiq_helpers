@@ -30,15 +30,28 @@ class MoneyField:
     def set_amount_from_decimal(self, decimal_amount: Decimal) -> None:
         self.amount = self.get_amount_from_decimal(decimal_amount)
 
-    def __init__(self, amount: int, currency: str) -> None:
+    def __init__(
+        self, amount: int, currency: str, vat_amount: int, vat_rate: str
+    ) -> None:
         self.amount = amount
         self.currency = currency
+        self.vat_amount = vat_amount
+        self.vat_rate = vat_rate
 
     def to_dict(self):
-        return {'amount': self.amount, 'currency': self.currency}
+        return {
+            'amount': self.amount,
+            'currency': self.currency,
+            'vat_amount': self.vat_amount,
+            'vat_rate': self.vat_rate,
+        }
 
 
 class DecimalMoneyField(MoneyField):
-    def __init__(self, decimal_amount: Decimal, currency: str) -> None:
-        self.amount = DecimalMoneyField.get_amount_from_decimal(decimal_amount)
-        self.currency = currency
+    def __init__(
+        self, decimal_amount: Decimal, currency: str,
+        vat_amount: int, vat_rate: str
+    ) -> None:
+        amount = DecimalMoneyField.get_amount_from_decimal(decimal_amount)
+        super().__init__(
+            amount, currency, vat_amount, vat_rate)
