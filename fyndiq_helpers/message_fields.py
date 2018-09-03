@@ -31,7 +31,7 @@ class MoneyField:
         self.amount = self.get_amount_from_decimal(decimal_amount)
 
     def __init__(
-        self, amount: int, currency: str, vat_amount: int, vat_rate: str
+        self, amount: int, currency: str, vat_amount: int, vat_rate: float
     ) -> None:
         self.amount = amount
         self.currency = currency
@@ -50,7 +50,7 @@ class MoneyField:
 class DecimalMoneyField(MoneyField):
     def __init__(
         self, decimal_amount: Decimal, currency: str,
-        vat_amount: int, vat_rate: str
+        vat_amount: int, vat_rate: float
     ) -> None:
         amount = DecimalMoneyField.get_amount_from_decimal(decimal_amount)
         super().__init__(
