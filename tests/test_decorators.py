@@ -179,7 +179,9 @@ class TestViewDecorators:
         ({'field': {'type': 'string'}}, {'field': 1}, False),
         ({'field': {'type': 'string'}}, {'field2': 'a'}, False),
     ])
-    def test_validate_data(self, schema, indata, expected_result):
+    def test_validate_data_raises_exception_on_faulty_data(
+        self, schema, indata, expected_result
+    ):
         @validate_data(schema)
         def test_method(field):
             pass
