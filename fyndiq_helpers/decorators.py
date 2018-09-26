@@ -6,6 +6,8 @@ import structlog
 import cerberus
 from sanic import response
 
+from fyndiq_helpers.exceptions import ValidationFailedException
+
 logger = structlog.get_logger(__name__)
 
 
@@ -86,6 +88,39 @@ class validate_payload:
                 return response.json(desc, 400)
 
             return view(request, payload, *args, **kwargs)
+
+        return wrapped_function
+
+
+class validate_data:
+    """[summary]
+    A decorator that validates the kwargs indata.
+    The schema to be used for validation is passed to the decorator.
+
+    Raises:
+        ValidationFailedException: is raised if the validation fails
+    """
+
+    def __init__(self, schema: dict,
+                 allow_unknown_fields: bool = False) -> None:
+        self.schema = schema
+        self.allow_unknown_fields = allow_unknown_fields
+
+    def __call__(self, func: Callable) -> Callable:
+        @wraps(func)
+        def wrapped_function(*args, **kwargs) -> Any:
+
+            validator = cerberus.Validator(
+                self.schema,
+                allow_unknown=self.allow_unknown_fields
+            )
+            if not validator.validate(kwargs):
+                errors = validator.errors
+                description = 'Invalid data'
+                logger.warning(description, errors=errors)
+                raise ValidationFailedException(details=errors)
+
+            return func(*args, **kwargs)
 
         return wrapped_function
 

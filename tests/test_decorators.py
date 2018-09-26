@@ -4,7 +4,9 @@ from unittest import mock
 
 from sanic import response
 
-from fyndiq_helpers.decorators import validate_payload, check_required_params
+from fyndiq_helpers.decorators import (
+    validate_payload, check_required_params, validate_data)
+from fyndiq_helpers.exceptions import ValidationFailedException
 
 
 class TestViewDecorators:
@@ -171,3 +173,21 @@ class TestViewDecorators:
                          b'"Following request params are required: '\
                          b'[\'required_param\', \'another_required_param\']."}'
         assert request_response.body == expected_error
+
+    @pytest.mark.parametrize('schema, indata, expected_result', [
+        ({'field': {'type': 'string'}}, {'field': 'a'}, True),
+        ({'field': {'type': 'string'}}, {'field': 1}, False),
+        ({'field': {'type': 'string'}}, {'field2': 'a'}, False),
+    ])
+    def test_validate_data_raises_exception_on_faulty_data(
+        self, schema, indata, expected_result
+    ):
+        @validate_data(schema)
+        def test_method(field):
+            pass
+
+        if expected_result is True:
+            test_method(**indata)
+        else:
+            with pytest.raises(ValidationFailedException):
+                test_method(**indata)
