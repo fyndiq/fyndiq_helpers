@@ -9,3 +9,7 @@ class ExtendedException(Exception):
 
     def __repr__(self):
         return self.details
+
+
+class ValidationFailedException(ExtendedException):
+    pass
