@@ -94,7 +94,7 @@ class validate_payload:
 
 class validate_data:
     """
-    Validates indata to methods
+    Validates kwargs indata of a method
 
     The validation is done by Cerberus lib against view-specific schemas.
     """
