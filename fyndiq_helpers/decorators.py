@@ -93,11 +93,14 @@ class validate_payload:
 
 
 class validate_data:
-    """
-    Validates kwargs indata of a method
+    """[summary]
+    A decorator that validates the kwargs indata.
+    The schema to be used for validation is passed to the decorator.
 
-    The validation is done by Cerberus lib against view-specific schemas.
+    Raises:
+        ValidationFailedException: is raised if the validation fails
     """
+
     def __init__(self, schema: dict,
                  allow_unknown_fields: bool = False) -> None:
         self.schema = schema
