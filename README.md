@@ -1,8 +1,7 @@
-# {{ cookiecutter.reponame|replace('-', ' ') }}
+# Fyndiq helpers
 
-[![CircleCI integration](https://circleci.com/gh/fyndiq/{{ cookiecutter.reponame }}/tree/master.svg?style=shield&circle-token={{ cookiecutter.circleci_status_token }})](https://circleci.com/gh/fyndiq/{{ cookiecutter.reponame }}/tree/master)
-[![CircleCI prod](https://circleci.com/gh/fyndiq/{{ cookiecutter.reponame }}/tree/prod.svg?style=shield&circle-token={{ cookiecutter.circleci_status_token }})](https://circleci.com/gh/fyndiq/{{ cookiecutter.reponame }}/tree/prod)
-[![codecov](https://codecov.io/gh/fyndiq/{{ cookiecutter.reponame }}/branch/master/graph/badge.svg?token={{ cookiecutter.codecov_token }})](https://codecov.io/gh/fyndiq/{{ cookiecutter.reponame }})
+[![CircleCI](https://circleci.com/gh/fyndiq/fyndiq_helpers.svg?style=shield)](https://circleci.com/gh/fyndiq/fyndiq_helpers)
+[![codecov](https://codecov.io/gh/fyndiq/fyndiq_helpers/branch/master/graph/badge.svg)](https://codecov.io/gh/fyndiq/fyndiq_helpers)
 
 ## Purpose
 
@@ -18,10 +17,6 @@ instructions how to setup the development environment.
     make setup
     source .venv/bin/activate
 
-### Run service
-
-    make run
-
 ### Run tests
 
     make test
@@ -29,11 +24,3 @@ instructions how to setup the development environment.
 ### Run linter
 
     make lint
-
-### Generate K8s manifests
-
-    make manifests
-
-## API reference
-
-See [API reference](docs/api/README.md)
