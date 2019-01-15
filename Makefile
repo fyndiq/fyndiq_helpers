@@ -9,3 +9,6 @@ setup:
 
 test: check lint
 	scripts/test.sh
+
+update:
+	@scripts/update.sh

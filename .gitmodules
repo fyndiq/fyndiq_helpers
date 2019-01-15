@@ -1,0 +1,4 @@
+[submodule "scripts/ci-cd"]
+	path = scripts/ci-cd
+	url = git@github.com:fyndiq/ci-cd.git
+	branch = master

@@ -1,0 +1,114 @@
+version: 2
+references:
+  container_config: &container_config
+    docker:
+      - image: fyndiq/circleci-python-gcloudsdk:latest
+
+  checkout_submodules: &checkout_submodules
+    run:
+      name: Checkout submodules
+      command: |
+        git submodule sync
+        git submodule update --init --remote
+
+  setup_env: &setup_env
+    run:
+      name: Setup environment
+      command: |
+        echo 'export APP_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
+        # Name of the deployment from which a pod will be selected to run
+        # the smoke tests.
+        #
+        # All deployments that belongs to the same name will also be rolled back
+        # on failures.
+        #
+        # Default we use the same name as the repository. Only override this
+        # if the app label in the deployments doesn't match the repo name.
+        echo 'export K8S_APP_NAME=$APP_NAME' >> $BASH_ENV
+
+  build_image: &build_image
+    run:
+      name: Build image
+      command: ./scripts/ci-cd/build.sh
+
+  rollback_deployment: &rollback_deployment
+    run:
+      name: Rollback deployment
+      command: ./scripts/ci-cd/rollback_deployment.sh
+      when: on_fail
+
+  gcloud_setup: &gcloud_setup
+    run:
+      name: Setup Google Cloud SDK
+      command: ./scripts/ci-cd/setup-gcloud.sh
+
+jobs:
+  build:
+    <<: *container_config
+    steps:
+      - checkout
+      - *checkout_submodules
+      - *setup_env
+      - setup_remote_docker
+      - *gcloud_setup
+      - *build_image
+      - run:
+          name: Run lint
+          command: ./scripts/ci-cd/run.sh "make lint"
+      - run:
+          name: Run unit tests
+          command: ./scripts/ci-cd/run.sh "make unit-test"
+      - run:
+          name: Publish image
+          command: ./scripts/ci-cd/publish.sh
+
+  deploy:
+    <<: *container_config
+    steps:
+      - checkout
+      - *checkout_submodules
+      - *setup_env
+      - *gcloud_setup
+      - run:
+          name: Deploy image
+          command: ./scripts/ci-cd/deploy.sh
+      - run:
+          name: Running K8s readiness check
+          command: ./scripts/ci-cd/readiness_check.sh
+      - *rollback_deployment
+
+  smoke-test:
+    <<: *container_config
+    steps:
+      - checkout
+      - *checkout_submodules
+      - *setup_env
+      - *gcloud_setup
+      - run:
+          name: Run service smoke tests
+          command: ./scripts/ci-cd/exec_cmd_pod.sh "make -f ./tests/smoke/Makefile smoke-test-ci"
+
+workflows:
+  version: 2
+  build_deploy_and_test:
+    jobs:
+      - build:
+          context: org-global
+      - deploy:
+          context: org-global
+          requires:
+            - build
+          filters:
+              branches:
+                only:
+                  - master
+                  - prod
+                  - sandbox
+      - smoke-test:
+          context: org-global
+          requires:
+            - deploy
+          filters:
+              branches:
+                only:
+                  - master

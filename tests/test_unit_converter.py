@@ -1,6 +1,7 @@
 
-import pytest
 from decimal import Decimal
+
+import pytest
 
 from fyndiq_helpers.unit_converter import UnitConverter
 
