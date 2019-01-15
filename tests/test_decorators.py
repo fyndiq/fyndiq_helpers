@@ -4,8 +4,7 @@ from unittest import mock
 import pytest
 from sanic import response
 
-from fyndiq_helpers.decorators import (
-    check_required_params, validate_data, validate_payload)
+from fyndiq_helpers.decorators import check_required_params, validate_data, validate_payload
 from fyndiq_helpers.exceptions import ValidationFailedException
 
 
