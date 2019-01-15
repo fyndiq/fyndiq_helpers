@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from fyndiq_helpers.message_fields import MoneyField, DecimalMoneyField
+from fyndiq_helpers.message_fields import DecimalMoneyField, MoneyField
 
 
 class TestMoneyField():

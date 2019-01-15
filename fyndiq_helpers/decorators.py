@@ -1,9 +1,8 @@
 from functools import wraps
 from typing import Any, Callable
 
-import structlog
-
 import cerberus
+import structlog
 from sanic import response
 
 from fyndiq_helpers.exceptions import ValidationFailedException

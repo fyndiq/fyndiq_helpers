@@ -1,11 +1,11 @@
 
-import pytest
 from unittest import mock
 
+import pytest
 from sanic import response
 
 from fyndiq_helpers.decorators import (
-    validate_payload, check_required_params, validate_data)
+    check_required_params, validate_data, validate_payload)
 from fyndiq_helpers.exceptions import ValidationFailedException
 
 
