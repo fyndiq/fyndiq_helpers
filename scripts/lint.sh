@@ -1,5 +1,7 @@
 #!/bin/bash
-command -v flake8 >/dev/null 2>&1 || echo "flake8 is required"
-
-echo "Running python linter..."
+set -e
+echo "Running flake8..."
 flake8
+
+echo "Running mypy..."
+mypy fyndiq_helpers/

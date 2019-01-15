@@ -1,14 +1,13 @@
-check:
-	@scripts/check.sh
-
 lint:
 	@scripts/lint.sh
 
 setup:
 	scripts/setup.sh
 
-test: check lint
-	scripts/test.sh
+unit-test:
+	@scripts/unit-test.sh
+
+test: unit-test
 
 update:
 	@scripts/update.sh
