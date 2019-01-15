@@ -5,7 +5,7 @@
 
 ## Purpose
 
-This service...
+This library contains functionality that generic and is shared between more than one service.
 
 ## Getting started
 
