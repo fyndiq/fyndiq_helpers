@@ -4,4 +4,4 @@ ARG ENV=test
 ENV CONFIG=$ENV
 
 COPY requirements/* /tmp/
-RUN pip install --process-dependency-links --no-cache-dir -r /tmp/$ENV.txt
+RUN pip install --process-dependency-links --no-cache-dir -r /tmp/test.txt
