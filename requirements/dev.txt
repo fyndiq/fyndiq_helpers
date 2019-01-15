@@ -1,8 +1,4 @@
--r common.txt
+-r test.txt
 
-mypy
-flake8
-pytest
-pytest-coverage
 ipdb
 
