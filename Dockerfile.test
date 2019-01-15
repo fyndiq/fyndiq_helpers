@@ -1,0 +1,4 @@
+FROM fyndiq_helpers:latest
+
+ARG ENV=test
+RUN pip install --process-dependency-links --no-cache-dir -r /tmp/$ENV.txt
