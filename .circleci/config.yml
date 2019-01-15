@@ -26,6 +26,11 @@ references:
         # if the app label in the deployments doesn't match the repo name.
         echo 'export K8S_APP_NAME=$APP_NAME' >> $BASH_ENV
 
+  build_image: &build_image
+    run:
+      name: Build image
+      command: ./scripts/ci-cd/build.sh
+
   gcloud_setup: &gcloud_setup
     run:
       name: Setup Google Cloud SDK
@@ -40,6 +45,7 @@ jobs:
       - *setup_env
       - setup_remote_docker
       - *gcloud_setup
+      - *build_image
       - run:
           name: Run lint
           command: ./scripts/ci-cd/run.sh "make lint"
