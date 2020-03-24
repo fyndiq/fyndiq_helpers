@@ -9,7 +9,7 @@ class TestMoneyField():
         amount = 100
         currency = 'SEK'
         vat_amount = 25
-        vat_rate = 0.25
+        vat_rate = 2500
 
         mf = MoneyField(
             amount=amount,
@@ -20,12 +20,14 @@ class TestMoneyField():
 
         assert mf.amount == amount
         assert mf.currency == currency
+        assert mf.vat_amount == vat_amount
+        assert mf.vat_rate == vat_rate
 
     def test_to_decimals_should_return_decimal(self):
         amount = 1000
         currency = 'SEK'
         vat_amount = 250
-        vat_rate = 0.25
+        vat_rate = 2500
 
         mf = MoneyField(
             amount=amount,
@@ -48,7 +50,7 @@ class TestMoneyField():
         amount = 1000
         currency = 'SEK'
         vat_amount = 250
-        vat_rate = 0.25
+        vat_rate = 2500
 
         mf = MoneyField(
             amount=amount,
@@ -68,7 +70,7 @@ class TestMoneyField():
         amount = 1000
         currency = 'SEK'
         vat_amount = 250
-        vat_rate = 0.25
+        vat_rate = 2500
 
         mf = MoneyField(
             amount=amount,
@@ -88,20 +90,25 @@ class TestMoneyField():
         assert response == expected_response
 
 
-class TestDecimalMoneyField():
+class TestDecimalMoneyField:
     def test_init(self):
         amount = Decimal("10.0")
         currency = 'SEK'
-        vat_amount = 250
-        vat_rate = 0.25
+        vat_amount = Decimal("2")
+        vat_rate = Decimal("0.25")
+
         expected_amount = 1000
+        expected_vat_amount = 200
+        expected_vat_rate = 2500
 
         mf = DecimalMoneyField(
             decimal_amount=amount,
             currency=currency,
-            vat_amount=vat_amount,
-            vat_rate=vat_rate
+            decimal_vat_amount=vat_amount,
+            decimal_vat_rate=vat_rate
         )
 
         assert mf.amount == expected_amount
         assert mf.currency == currency
+        assert mf.vat_amount == expected_vat_amount
+        assert mf.vat_rate == expected_vat_rate
