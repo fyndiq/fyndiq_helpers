@@ -9,5 +9,8 @@ unit-test:
 
 test: unit-test
 
+pip-update:
+	@scripts/pip-update.sh
+
 update:
 	@scripts/update.sh
