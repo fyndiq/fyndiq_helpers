@@ -11,8 +11,6 @@ references:
     - run:
         name: Google Cloud Setup
         command: .ci-cd/gcloud-setup.sh
-    - attach_workspace:
-        at: /tmp/skaffold
 
 jobs:
   build-and-test:
@@ -40,10 +38,6 @@ jobs:
     - run:
         name: Run unit tests
         command: .ci-cd/docker-run.sh "make unit-test"
-    - persist_to_workspace:
-        root: /tmp/skaffold
-        paths:
-        - build.json
 
 workflows:
   version: 2
