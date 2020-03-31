@@ -1,55 +1,24 @@
 version: 2
-references:
-  container_config: &container_config
-    docker:
-    - image: fyndiq/circleci-python-gcloudsdk:latest
-    steps:
-    - checkout
-    - run:
-        name: Checkout CI-CD scripts
-        command: git clone git@github.com:fyndiq/k8s-ci-cd.git .ci-cd
-    - run:
-        name: Google Cloud Setup
-        command: .ci-cd/gcloud-setup.sh
-
 jobs:
-  build-and-test:
-    <<: *container_config
+  build:
+    working_directory: ~/build
     docker:
-    - image: fyndiq/circleci-python-gcloudsdk:latest
+      - image: fyndiq/python-alpine-kafka:latest
     steps:
-    - checkout
-    - setup_remote_docker
-    - run:
-        name: Checkout CI-CD scripts
-        command: git clone git@github.com:fyndiq/k8s-ci-cd.git .ci-cd
-    - run:
-        name: Google Cloud Setup
-        command: .ci-cd/gcloud-setup.sh
-    - run:
-        name: Build image
-        command: .ci-cd/build.sh
-    - run:
-        name: Run security checks
-        command: .ci-cd/docker-run.sh "make security-checks"
-    - run:
-        name: Run lint
-        command: .ci-cd/docker-run.sh "make lint"
-    - run:
-        name: Run unit tests
-        command: .ci-cd/docker-run.sh "make unit-test"
-
+      - checkout
+      - run:
+          name: Install dependencies
+          command: pip install -r requirements/common.txt -r requirements/test.txt
+      - run:
+          name: Running lint
+          command: make lint
+      - run:
+          name: Running tests
+          command: make unit-test
+      - store_test_results:
+          path: /tmp/test-results
 workflows:
   version: 2
-  build-test-deploy:
+  build:
     jobs:
-      - build-and-test:
-          context: integration
-      - deploy-integration:
-          context: integration
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only:
-                - master
+      - build
