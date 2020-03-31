@@ -15,7 +15,7 @@ references:
         at: /tmp/skaffold
 
 jobs:
-  build:
+  build-test-deploy:
     <<: *container_config
     docker:
     - image: fyndiq/circleci-python-gcloudsdk:latest
