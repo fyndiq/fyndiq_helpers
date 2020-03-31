@@ -2,59 +2,49 @@ version: 2
 references:
   container_config: &container_config
     docker:
-      - image: fyndiq/circleci-python-gcloudsdk:latest
-
-  checkout_submodules: &checkout_submodules
-    run:
-      name: Checkout submodules
-      command: |
-        git submodule sync
-        git submodule update --init --remote
-
-  setup_env: &setup_env
-    run:
-      name: Setup environment
-      command: |
-        echo 'export APP_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
-        # Name of the deployment from which a pod will be selected to run
-        # the smoke tests.
-        #
-        # All deployments that belongs to the same name will also be rolled back
-        # on failures.
-        #
-        # Default we use the same name as the repository. Only override this
-        # if the app label in the deployments doesn't match the repo name.
-        echo 'export K8S_APP_NAME=$APP_NAME' >> $BASH_ENV
-
-  build_image: &build_image
-    run:
-      name: Build image
-      command: ./scripts/ci-cd/build.sh
-
-  gcloud_setup: &gcloud_setup
-    run:
-      name: Setup Google Cloud SDK
-      command: ./scripts/ci-cd/setup-gcloud.sh
+    - image: fyndiq/circleci-python-gcloudsdk:latest
+    steps:
+    - checkout
+    - run:
+        name: Checkout CI-CD scripts
+        command: git clone git@github.com:fyndiq/k8s-ci-cd.git .ci-cd
+    - run:
+        name: Google Cloud Setup
+        command: .ci-cd/gcloud-setup.sh
+    - attach_workspace:
+        at: /tmp/skaffold
 
 jobs:
   build:
     <<: *container_config
+    docker:
+    - image: fyndiq/circleci-python-gcloudsdk:latest
     steps:
-      - checkout
-      - *checkout_submodules
-      - *setup_env
-      - setup_remote_docker
-      - *gcloud_setup
-      - *build_image
-      - run:
-          name: Run lint
-          command: ./scripts/ci-cd/run.sh "make lint"
-      - run:
-          name: Run unit tests
-          command: ./scripts/ci-cd/run.sh "make unit-test"
-      - run:
-          name: Publish image
-          command: ./scripts/ci-cd/publish.sh
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: Checkout CI-CD scripts
+        command: git clone git@github.com:fyndiq/k8s-ci-cd.git .ci-cd
+    - run:
+        name: Google Cloud Setup
+        command: .ci-cd/gcloud-setup.sh
+    - run:
+        name: Build image
+        command: .ci-cd/build.sh
+    - run:
+        name: Run security checks
+        command: .ci-cd/docker-run.sh "make security-checks"
+    - run:
+        name: Run lint
+        command: .ci-cd/docker-run.sh "make lint"
+    - run:
+        name: Run unit tests
+        command: .ci-cd/docker-run.sh "make unit-test"
+    - persist_to_workspace:
+        root: /tmp/skaffold
+        paths:
+        - build.json
+
 
 workflows:
   version: 2
