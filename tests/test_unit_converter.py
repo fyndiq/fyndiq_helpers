@@ -1,9 +1,8 @@
-
 from decimal import Decimal
 
 import pytest
 
-from fyndiq_helpers.unit_converter import UnitConverter
+from fyndiq_helpers.unit_converter import UnitConverter, UnitConverterPriceField
 
 
 class TestConverter:
@@ -54,3 +53,21 @@ class TestConverter:
 
     def test_vat_rate_to_decimal(self):
         assert UnitConverter.vat_rate_to_decimal(2500) == Decimal('0.25')
+
+    def test_price_field_to_decimals(self):
+        price_field = dict(
+            amount=1000,
+            vat_amount=250,
+            vat_rate=2500,
+            currency="SEK"
+        )
+
+        expected_result = dict(
+            amount=10.0,
+            vat_amount=2.5,
+            vat_rate=0.25,
+            currency="SEK"
+        )
+
+        assert expected_result == UnitConverterPriceField.convert_price_field_to_decimal(price_field)
+
