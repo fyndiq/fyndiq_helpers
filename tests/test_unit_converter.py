@@ -62,12 +62,11 @@ class TestConverter:
             currency="SEK"
         )
 
-        expected_result = dict(
+        expected = dict(
             amount=10.0,
             vat_amount=2.5,
             vat_rate=0.25,
             currency="SEK"
         )
 
-        assert expected_result == UnitConverterPriceField.convert_price_field_to_decimal(price_field)
-
+        assert expected == UnitConverterPriceField.convert_price_field_to_decimal(price_field)
