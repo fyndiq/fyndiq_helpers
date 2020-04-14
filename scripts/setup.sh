@@ -1,6 +1,5 @@
-#!/usr/bin/env sh
-command -v virtualenv >/dev/null 2>&1 || echo "virtualenv is required"
+#!/usr/bin/env bash
 
-virtualenv -p python3 .venv
-source .venv/bin/activate
-pip install --process-dependency-links -r requirements/dev.txt
+set -e
+python3 -m venv .venv
+./.venv/bin/pip3 install -r requirements/common.txt -r requirements/test.txt -r requirements/dev.txt

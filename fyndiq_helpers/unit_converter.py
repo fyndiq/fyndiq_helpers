@@ -1,3 +1,4 @@
+from copy import deepcopy
 from decimal import Decimal
 
 MINOR_UNIT_CONVERSION_FACTOR = 100
@@ -39,3 +40,18 @@ class UnitConverter:
             raise TypeError("vat_rate should be a string or a Decimal")
         return int(round((Decimal(vat_rate) *
                           VAT_RATE_CONVERSION_FACTOR).quantize(ROUNDING_PRECISION), 0))
+
+
+class UnitConverterPriceField(UnitConverter):
+
+    @classmethod
+    def convert_price_field_to_decimal(cls, price_field):
+        price_field = deepcopy(price_field)
+        price_field.update(
+            dict(
+                amount=cls.to_decimals(price_field["amount"]),
+                vat_amount=cls.to_decimals(price_field["vat_amount"]),
+                vat_rate=cls.vat_rate_to_decimal(price_field["vat_rate"])
+            )
+        )
+        return price_field
