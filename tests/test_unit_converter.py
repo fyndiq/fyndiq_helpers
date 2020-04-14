@@ -56,16 +56,16 @@ class TestConverter:
 
     def test_price_field_to_decimals(self):
         price_field = dict(
-            amount=1000,
-            vat_amount=250,
+            amount=1234,
+            vat_amount=123,
             vat_rate=2500,
             currency="SEK"
         )
 
         expected = dict(
-            amount=10.0,
-            vat_amount=2.5,
-            vat_rate=0.25,
+            amount=Decimal("12.34"),
+            vat_amount=Decimal("1.23"),
+            vat_rate=Decimal("0.25"),
             currency="SEK"
         )
 
